@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Estoque</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html">Início</a>
+            <a href="cadastro.html">Cadastrar Produto</a>
+            <a href="gerenciamento.html">Gerenciar Estoque</a>
+        </nav>
+    </header>
+    
+    <main>
+        <h2>Gerenciamento de Estoque</h2>
+        <table id="tabelaProdutos">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Código</th>
+                    <th>Quantidade</th>
+                    <th>Preço</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="corpoTabela">
+                <!-- Produtos serão inseridos aqui via JS -->
+            </tbody>
+        </table>
+        <button onclick="window.print()">Imprimir Estoque</button>
+    </main>
+
+    <script src="js/firebase.js"></script>
+    <script src="js/gerenciamento.js"></script>
+</body>
+</html>
