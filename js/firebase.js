@@ -93,5 +93,3 @@ async function excluirProduto(id) {
         alert('Erro ao excluir produto: ' + erro.message);
     }
 }
-
-// Mantenha as outras funções (atualizarProduto e excluirProduto) com logs similares

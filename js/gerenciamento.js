@@ -10,66 +10,56 @@ document.addEventListener('DOMContentLoaded', () => {
             const linha = document.createElement('tr');
             
             linha.innerHTML = `
-                <td>${produto.nome}</td>
-                <td>${produto.codigo}</td>
-                <td>${produto.quantidade}</td>
-                <td>R$ ${produto.preco.toFixed(2)}</td>
+                <td><span id="nome-display-${id}">${produto.nome}</span><input type="text" value="${produto.nome}" id="nome-${id}" style="display:none;" /></td>
+                <td><span id="codigo-display-${id}">${produto.codigo}</span><input type="text" value="${produto.codigo}" id="codigo-${id}" style="display:none;" /></td>
+                <td><span id="quantidade-display-${id}">${produto.quantidade}</span><input type="number" value="${produto.quantidade}" id="quantidade-${id}" style="display:none;" /></td>
+                <td><span id="preco-display-${id}">R$ ${produto.preco.toFixed(2)}</span><input type="text" value="${produto.preco}" id="preco-${id}" style="display:none;" /></td>
                 <td>
-                    <button onclick="editarProduto('${id}')">Editar</button>
-                    <button onclick="excluirProdutoLinha('${id}')">Excluir</button>
+                    <button onclick="editarProduto('${id}', this)">Editar</button>
+                    <button onclick="salvarProduto('${id}')" style="display:none;" id="salvar-${id}">Salvar</button>
+                    <button onclick="excluirProdutoLinha('${id}')" style="display:inline-block;" id="excluir-${id}">Excluir</button>
                 </td>
             `;
             
             corpoTabela.appendChild(linha);
         }
     }
-    
-    window.editarProduto = async (id) => {
-        const produtos = await listarProdutos();
-        const produto = produtos[id];
 
-        if (!produto) {
-            alert('Produto não encontrado!');
-            return;
-        }
-
-        // Preencha o formulário com os dados do produto
-        const produtoIdInput = document.getElementById('produtoId');
-        const nomeInput = document.getElementById('nome');
-        const codigoInput = document.getElementById('codigo');
-        const quantidadeInput = document.getElementById('quantidade');
-        const precoInput = document.getElementById('preco');
-
-        // Verifique se os elementos existem
-        if (produtoIdInput && nomeInput && codigoInput && quantidadeInput && precoInput) {
-            produtoIdInput.value = id; // Armazene o ID do produto
-            document.getElementById('tituloFormulario').innerText = 'Editar Produto'; // Mude o título
-            nomeInput.value = produto.nome;
-            codigoInput.value = produto.codigo;
-            quantidadeInput.value = produto.quantidade;
-            precoInput.value = produto.preco;
-
-            // Adicione um evento para salvar as alterações
-            const formProduto = document.getElementById('formProduto');
-            formProduto.onsubmit = async (e) => {
-                e.preventDefault();
-                const produtoAtualizado = {
-                    nome: nomeInput.value,
-                    codigo: codigoInput.value,
-                    quantidade: parseInt(quantidadeInput.value),
-                    preco: parseFloat(precoInput.value.replace(',', '.'))
-                };
-
-                await atualizarProduto(id, produtoAtualizado); // Atualize o produto no Firebase
-                carregarProdutos(); // Recarregue a lista de produtos
-                formProduto.reset(); // Limpe o formulário
-                document.getElementById('tituloFormulario').innerText = 'Cadastro de Produto'; // Restaure o título
-            };
-        } else {
-            console.error('Um ou mais elementos do formulário não foram encontrados.');
-        }
+    window.editarProduto = (id, botaoEditar) => {
+        // Exibir campos de entrada e ocultar exibição
+        document.getElementById(`nome-display-${id}`).style.display = 'none';
+        document.getElementById(`codigo-display-${id}`).style.display = 'none';
+        document.getElementById(`quantidade-display-${id}`).style.display = 'none';
+        document.getElementById(`preco-display-${id}`).style.display = 'none';
+        
+        document.getElementById(`nome-${id}`).style.display = 'block';
+        document.getElementById(`codigo-${id}`).style.display = 'block';
+        document.getElementById(`quantidade-${id}`).style.display = 'block';
+        document.getElementById(`preco-${id}`).style.display = 'block';
+        
+        // Exibir botão de salvar e ocultar botão de editar e excluir
+        document.getElementById(`salvar-${id}`).style.display = 'inline-block';
+        botaoEditar.style.display = 'none'; // Oculta o botão "Editar"
+        document.getElementById(`excluir-${id}`).style.display = 'none'; // Oculta o botão "Excluir"
     };
-    
+
+    window.salvarProduto = async (id) => {
+        const nome = document.getElementById(`nome-${id}`).value;
+        const codigo = document.getElementById(`codigo-${id}`).value;
+        const quantidade = parseInt(document.getElementById(`quantidade-${id}`).value);
+        const preco = parseFloat(document.getElementById(`preco-${id}`).value);
+
+        const produtoAtualizado = {
+            nome,
+            codigo,
+            quantidade,
+            preco
+        };
+
+        await atualizarProduto(id, produtoAtualizado); // Atualize o produto no Firebase
+        carregarProdutos(); // Recarregue a lista de produtos
+    };
+
     window.excluirProdutoLinha = async (id) => {
         if (confirm('Tem certeza que deseja excluir este produto?')) {
             await excluirProduto(id);
