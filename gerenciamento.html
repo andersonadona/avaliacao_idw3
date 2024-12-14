@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Estoque</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/print.css" media="print">
+</head>
+<body>
+    <header>
+        <nav>
+            <button onclick="location.href='index.html'">Inicio</button>
+            <button onclick="location.href='cadastro.html'">Cadastrar Produto</button>
+            <button onclick="location.href='gerenciamento.html'">Gerenciar Estoque</button>
+        </nav>
+    </header>
+    
+    <main>
+        <h2>Gerenciamento de Estoque</h2>
+        <table id="tabelaProdutos">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Código</th>
+                    <th>Quantidade</th>
+                    <th>Preço</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="corpoTabela">
+                <!-- Produtos serão inseridos aqui via JS -->
+            </tbody>
+        </table>
+        <button class="print" onclick="window.print()">Imprimir Estoque</button>
+    </main>
+
+    <script src="js/firebase.js"></script>
+    <script src="js/gerenciamento.js"></script>
+</body>
+</html>
